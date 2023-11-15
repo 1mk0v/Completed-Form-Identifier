@@ -1,10 +1,6 @@
 import datetime
-import email_validator
-import phonenumbers
-from phonenumbers import carrier
-from phonenumbers.phonenumberutil import number_type
+import re
 import ast
-
 
 def validateDict(data:dict):
     newDict = dict()
@@ -26,20 +22,15 @@ def strValidate(data:str):
         return type(data).__name__
 
 def emailValidate(email:str):
-    try:
-        email_validator.validate_email(email)
+    if type(email) == str and re.match(r'[^@]+@[^@]+\.[^@]+', email):
         return True
-    except:
-        return False
+    return False
 
 def phoneValidate(phone:str):
-    try:
-        return carrier._is_mobile(
-            number_type(phonenumbers.parse(phone))
-        )
-    except:
-        return False
-    
+    if type(phone) == str and re.match(r'[+][7] \d{3} \d{3} \d{2} \d{2}', phone):
+        return True
+    return False
+
 def dateValidate(date:str):
     try:
         datetime.datetime.strptime(date, '%Y-%m-%d')
